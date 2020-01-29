@@ -38,7 +38,7 @@ app.get("/help", (req, res) => {
   res.render("help", {
     title: "Help",
     body: "Troubleshooting steps.",
-    name: 'Vishal Acharya'
+    name: "Vishal Acharya"
   });
 });
 
@@ -46,7 +46,23 @@ app.get("/weather", (req, res) => {
   res.send({
     forecast: "17 degrees, Smoke",
     location: "Noida",
-    name: 'Created by Vishal Acharya'
+    name: "Created by Vishal Acharya"
+  });
+});
+
+app.get("/help/*", (req, res) => {
+  res.render("404", {
+    title: '404',
+    error: "Help article not found.",
+    name: "Vishal Acharya"
+  });
+});
+
+app.get("*", (req, res) => {
+  res.render("404", {
+    title: '404',
+    error: "Page not found.",
+    name: "Vishal Acharya"
   });
 });
 
