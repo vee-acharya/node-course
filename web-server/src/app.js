@@ -3,6 +3,10 @@ const path = require("path");
 const express = require("express");
 const hbs = require("hbs");
 
+// Require exports
+const locationService = require("./utils/geocode");
+const forecastService = require("./utils/forecast");
+
 // Initialise express application in variable 'app'
 const app = express();
 
@@ -43,16 +47,51 @@ app.get("/help", (req, res) => {
 });
 
 app.get("/weather", (req, res) => {
-  res.send({
-    forecast: "17 degrees, Smoke",
-    location: "Noida",
-    name: "Created by Vishal Acharya"
-  });
+  if (!req.query.address) {
+    return res.send({
+      errorMessage: "You must provide an address."
+    });
+  }
+
+  locationService.geocode(
+    req.query.address,
+    (geocodeError, { latitude, longitude, location }) => {
+      if (geocodeError) {
+        return res.send({
+          errorMessage: geocodeError
+        });
+      }
+
+      forecastService.forecast(
+        latitude,
+        longitude,
+        (forecastError, forecastData) => {
+          if (forecastError) {
+            return res.send({
+              errorMessage: forecastError
+            });
+          }
+
+          res.send({
+            forecast: forecastData,
+            location,
+            address: req.query.address,
+          });
+        }
+      );
+    }
+  );
+
+  // res.send({
+  //   forecast: "17 degrees, Smoke",
+  //   location: "Noida",
+  //   address: req.query.address
+  // });
 });
 
 app.get("/help/*", (req, res) => {
   res.render("404", {
-    title: '404',
+    title: "404",
     error: "Help article not found.",
     name: "Vishal Acharya"
   });
@@ -60,7 +99,7 @@ app.get("/help/*", (req, res) => {
 
 app.get("*", (req, res) => {
   res.render("404", {
-    title: '404',
+    title: "404",
     error: "Page not found.",
     name: "Vishal Acharya"
   });
