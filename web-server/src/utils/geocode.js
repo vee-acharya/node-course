@@ -5,10 +5,10 @@ const geocode = (address, callback) => {
     address
   )}.json?access_token=pk.eyJ1IjoidmlzaGFsYWNoYXJ5YSIsImEiOiJjazRtaTlkOHowbGloM2ZtaW43YXFuM3Z5In0.Pozsl1P09uqGPmXItkeCGg`;
 
-  request({ url, json: true }, (error, {body}) => {
+  request({ url, json: true }, (error, body) => {
     if (error) {
       callback("Unable to connect to location services!", undefined);
-    } else if ((body.features.length = 0)) {
+    } else if ((body.features.length === 0)) {
       callback("Unable to find location. Try another search.", undefined);
     } else {
       callback(undefined, {
