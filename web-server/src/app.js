@@ -9,6 +9,7 @@ const forecastService = require("./utils/forecast");
 
 // Initialise express application in variable 'app'
 const app = express();
+const port = process.env.PORT || 3000;
 
 // Define paths for express configuration
 const publicDirectoryPath = path.join(__dirname, "../public");
@@ -81,12 +82,6 @@ app.get("/weather", (req, res) => {
       );
     }
   );
-
-  // res.send({
-  //   forecast: "17 degrees, Smoke",
-  //   location: "Noida",
-  //   address: req.query.address
-  // });
 });
 
 app.get("/help/*", (req, res) => {
@@ -106,6 +101,6 @@ app.get("*", (req, res) => {
 });
 
 // Start up server
-app.listen(3000, () => {
-  console.log("Server is up on port 3000.");
+app.listen(port, () => {
+  console.log(`Server is up on port ${port}.`);
 });
